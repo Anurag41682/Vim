@@ -7,16 +7,23 @@ set noexpandtab tabstop=2 shiftwidth=2
 set softtabstop=2
 set mouse=a
 set completeopt-=preview
+set nobackup
+set noswapfile
+set noundofile
+set nowritebackup
+
 
 "-----------------------------------------------------------------------------------------------
 call plug#begin('~/.vim/plugged')
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'} "like intellisense
 Plug 'dense-analysis/ale' "Linter (syntax checker) for all language need to install the linter globally
-Plug 'chiel92/vim-autoformat' "formatter for all language need to install formatter globally
+Plug 'rhysd/vim-clang-format' "formatter for c++ family
+Plug 'prettier/vim-prettier' "formatter for webdev language
 Plug 'sheerun/vim-polyglot' "Highlighter(Make text colorful) and indenter for all language
 Plug 'maxmellon/vim-jsx-pretty' "Highlighter for jsx files
-
+Plug 'junegunn/fzf.vim' "file explorer also install ripgrep
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } "same file explorer just to install latest
 Plug 'joshdick/onedark.vim' "theme colorscheme
 
 call plug#end()
@@ -41,7 +48,7 @@ syntax enable
 ":CocInstall coc-html (for html)
 ":CocInstall coc-css (for css)
 
-"------------------- Linter that need to be installed globally ------------------
+"------------------- Linter that need to be installed globally (needs config file)------------------
 " 'Eslint' for js,ts,jsx,tsx,json
 " 'clangd' work here for c++
 " 'htmlhint' for html
@@ -82,19 +89,30 @@ colorscheme onedark
 
 
 "---------------------------Keymaps and Binding------------------------------------------
-
+let mapleader=" "
 nnoremap <F5> :!g++-12 -std=c++20 -O2 -Wall -Wextra -Wshadow -fsanitize=undefined -fno-sanitize-recover -DLOCAL -g % -o %:r && ./%:r<CR>
 nnoremap<C-F5> :!clang++-14 -std=c++20 -Wall -Wextra -Wshadow -fsanitize=undefined -fno-sanitize-recover -DLOCAL  -g % -o %:r && ./%:r<CR>
 inoremap {<CR> {<CR>}<C-o>O
 vnoremap<C-C> :w !xclip -i -sel c <CR>
 noremap<C-A> ggVG
-noremap<C-T> :tabnew <CR>
-noremap<C-E> :Vexplore <CR>
+noremap<C-T> :tabnew
+
 
 "---------------------------------------------------------------------------------------------
 
+"-----------------------------fzf explorer specific----------------
+nnoremap <silent> <C-F> :Files<CR>
+
+"needs to install ripgrep
+noremap <silent> <leader>f :Rg<CR> 
+
+"---------enables hidden file to search------------
+let $FZF_DEFAULT_COMMAND = 'find . -type f'
+			
 
 
+
+"---------------------------------------------------------------------------------------------
 "----used in vim-jsx-pretty ----
 let g:vim_jsx_pretty_highlight_close_tag = 1
 let g:vim_jsx_pretty_colorful_config = 1 " default 0
@@ -102,23 +120,7 @@ let g:vim_jsx_pretty_colorful_config = 1 " default 0
 
 
 
-
 "-----------------------------------------------------------------------------
-
-
-" file explorer
-let g:netrw_banner = 0
-let g:netrw_liststyle = 3
-let g:netrw_browse_split = 4
-let g:netrw_altv = 1
-let g:netrw_winsize =20
-let g:netrw_list_hide= '.*\.swp$,\~$,\.orig$'
-"augroup ProjectDrawer
-"  autocmd!
-"  autocmd VimEnter * :Vexplore
-"augroup END
-
-
 
 
 
@@ -131,23 +133,24 @@ autocmd BufNewFile *.cpp execute "0r ~/.vim/template/".input("Template name: ").
 
 
 
+"-------------------------Auto-Format on Save -----------------------------
+"-------------------C++----------------------
 
-"----------------Auto-Format on Save -----------------
-"------------C++-----------
-
-
-au BufWrite *.cpp,*.c :Autoformat
+autocmd FileType cpp ClangFormatAutoEnable
 
 
-"---------Javascript------
+"----------------Javascript and all------------------
+
+let g:prettier#config#single_quote = 1
+let g:prettier#config#trailing_comma = 'all'
+let g:prettier#config#arrow_parens = 'avoid'
+
+autocmd BufWritePre *.js,*.jsx,*.ts,*.tsx,*.html,*.css,*.json,*.graphql :PrettierAsync
 
 
-au BufWrite *.js,*.html,*.json,*.css,*.jsx :Autoformat
 
 
-
-
-"---------------------------- Linter(syntax checker) -----------------------
+"---------------------------- Linter(syntax checker) --------------------------
 let g:ale_linters = {
       \ 'javascript': ['eslint'],
       \ 'javascript.jsx': ['eslint'],
@@ -156,7 +159,6 @@ let g:ale_linters = {
 			\ 'css': ['stylelint'],
 			\ 'typescript.tsx': ['eslint'],
       \ }
-
 
 
 
@@ -182,8 +184,6 @@ highlight MatchParen ctermfg=214 ctermbg=none
 
 "------------------------------------------------------------------------------
 
-
-
 "use <tab> to trigger completion and navigate to the next complete item
 function! CheckBackspace() abort
   let col = col('.') - 1
@@ -200,6 +200,25 @@ inoremap <silent><expr> <Tab>
 
 "--------------------------------------------------------------------------------
 
+"--------------To have only file name in new tab----------------------
+set tabline=%!MyTabLine()
+function! MyTabLine()
+    let s = ''
+    for i in range(tabpagenr('$'))
+        let tab = i + 1
+        let winnr = tabpagewinnr(tab)
+        let bufnr = tabpagebuflist(tab)[winnr - 1]
+        let bufname = bufname(bufnr)
+        let bufname = fnamemodify(bufname, ':t') " Get only the filename
+        let s .= '%' . tab . 'T'
+        let s .= (tab == tabpagenr() ? '%1*' : '%2*')
+        let s .= ' ' . bufname . ' '
+        if tab < tabpagenr('$')
+            let s .= '|'
+        endif
+    endfor
+    return s
+endfunction
 
 
 
@@ -207,73 +226,6 @@ inoremap <silent><expr> <Tab>
 "--------------------------------------------------------------------------------
 
 
-"fix tab name size
-if exists( '+showtabline' )
-    function! MyTabLine()
-        let s = ''
-        let wn = ''
-        let t = tabpagenr()
-        let i = 1
-        let cnt = 0
-        let totalLen = 0
-        while i <= tabpagenr( '$' )
-          let winnr = tabpagewinnr( i )
-          let buflist = tabpagebuflist( i )
-          let bufnr = buflist[winnr - 1]
-          let file = bufname( bufnr )
-          let buftype = getbufvar( bufnr , 'buftype' )
-          if buftype == 'nofile'
-              if file =~ '\/.'
-                  let file = substitute( file , '.*\/\ze.' , '' , '' )
-              endif
-          else
-              let file = fnamemodify( file , ':p:t' )
-          endif
-        "<Number><Space><file><Space>
-          let totalLen = totalLen + 3 + len(file)
-          let i = i + 1
-        endwhile
-        let i = 1 
-        while i <= tabpagenr( '$' )
-            let buflist = tabpagebuflist( i )
-            let winnr = tabpagewinnr( i )
-            let s .= '%' . i . 'T'
-            let s .= ( i == t ? '%1*' : '%2*' )
-            let wn = tabpagewinnr( i ,'$' )
-            let s .= '%#TabNum#'
-            let s .= i
-            "let s .= '%*'
-            let s .= ( i == t ? '%#TabLineSel#' : '%#TabLine#' )
-            let bufnr = buflist[winnr - 1]
-            let file = bufname( bufnr )
-            let buftype = getbufvar( bufnr , 'buftype' )
-            if buftype == 'nofile'
-                if file =~ '\/.'
-                    let file = substitute( file , '.*\/\ze.' , '' , '' )
-                endif
-            else
-                let file = fnamemodify( file , ':p:t' )
-            endif
-
-            "echo totalLen . "/" . &columns . ", file=" . file
-            if totalLen > &columns && len(file) > 16
-                let file = strpart( file, 0, 6 )  . "~" . strpart( file, len(file)-10 )
-            endif
-            if file == ''
-                let file = '[No Name]'
-            endif
-            let s .= ' ' . file . ' '
-            let i = i + 1
-        endwhile
-        let s .= '%T%#TabLineFill#%='
-        let s .= ( tabpagenr('$') > 1 ? '%999XX' : 'X' )
-        return s
-    endfunction
-    set stal=2
-    set tabline=%!MyTabLine()
-    highlight link TabNum Special
-endif
-
-
 "END
+
 
