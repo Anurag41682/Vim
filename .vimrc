@@ -16,7 +16,7 @@ set nowritebackup
 "-----------------------------------------------------------------------------------------------
 call plug#begin('~/.vim/plugged')
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'} "LSP support provider
+Plug 'neoclide/coc.nvim', {'branch': 'release'} "like intellisense
 Plug 'dense-analysis/ale' "Linter (syntax checker) for all language need to install the linter globally
 Plug 'rhysd/vim-clang-format' "formatter for c++ family
 Plug 'prettier/vim-prettier' "formatter for webdev language
@@ -48,7 +48,7 @@ syntax enable
 ":CocInstall coc-html (for html)
 ":CocInstall coc-css (for css)
 
-"------------------- Linter that need to be installed globally (need config file too)------------------
+"------------------- Linter that need to be installed globally (needs config file)------------------
 " 'Eslint' for js,ts,jsx,tsx,json
 " 'clangd' work here for c++
 " 'htmlhint' for html
@@ -105,13 +105,19 @@ noremap<silent> <C-L> :tabnext<CR>
 nnoremap <silent> <C-F> :Files<CR>
 
 "needs to install ripgrep (word search)
-noremap <silent> <leader>f :Rg<CR> 
+noremap <silent> <leader>f :Rg <CR> 
+
+"--------------enables word search inside hidden files--------
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --hidden --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
+  \   fzf#vim#with_preview(), <bang>0)
+
 
 "---------enables hidden file to search----------------------
 "let $FZF_DEFAULT_COMMAND = 'find . -type f'
-			
-"------------------------------------------------------------------------------------------------
 
+"------------------------------------------------------------------------------------------------
 
 
 
