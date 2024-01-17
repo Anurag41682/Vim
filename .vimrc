@@ -22,8 +22,8 @@ Plug 'rhysd/vim-clang-format' "formatter for c++ family
 Plug 'prettier/vim-prettier' "formatter for webdev language
 Plug 'sheerun/vim-polyglot' "Highlighter(Make text colorful) and indenter for all language
 Plug 'maxmellon/vim-jsx-pretty' "Highlighter for jsx files
-Plug 'junegunn/fzf.vim' "file explorer also install ripgrep
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } "same file explorer just to install latest
+Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'joshdick/onedark.vim' "theme colorscheme
 
 call plug#end()
@@ -61,7 +61,7 @@ syntax enable
 
 
 
-"------------------------Theme colorscheme-----------------------------------------------
+"-----------------------------------Theme colorscheme-----------------------------------------------
 
 "colorscheme solarized
 "colorscheme tokyonight
@@ -83,42 +83,43 @@ colorscheme onedark
 "let g:lightline = { 'colorscheme': 'tender' }
 "let g:airline_theme = 'tender'
 
+"----------------------------------------------------------------------------------------------------
 
 
 
 
-
-"---------------------------Keymaps and Binding------------------------------------------
-let mapleader=" "
+"------------------------------------Keymaps and Binding------------------------------------------
+"-------------------------General---------------------------------
 nnoremap <F5> :!g++-12 -std=c++20 -O2 -Wall -Wextra -Wshadow -fsanitize=undefined -fno-sanitize-recover -DLOCAL -g % -o %:r && ./%:r<CR>
 nnoremap<C-F5> :!clang++-14 -std=c++20 -Wall -Wextra -Wshadow -fsanitize=undefined -fno-sanitize-recover -DLOCAL  -g % -o %:r && ./%:r<CR>
 inoremap {<CR> {<CR>}<C-o>O
 vnoremap<C-C> :w !xclip -i -sel c <CR>
 noremap<C-A> ggVG
-noremap<C-T> :tabnew
+noremap<silent> <C-T> :tabnew<CR>
+noremap<silent> <C-E> :e .<CR>
+noremap<silent> <C-H> :tabprevious<CR>
+noremap<silent> <C-L> :tabnext<CR>
 
-
-"---------------------------------------------------------------------------------------------
-
-"-----------------------------fzf explorer specific----------------
+"-----------------------fzf explorer specific----------------
+"--------(file search)----------------
 nnoremap <silent> <C-F> :Files<CR>
 
-"needs to install ripgrep
+"needs to install ripgrep (word search)
 noremap <silent> <leader>f :Rg<CR> 
 
-"---------enables hidden file to search------------
-let $FZF_DEFAULT_COMMAND = 'find . -type f'
+"---------enables hidden file to search----------------------
+"let $FZF_DEFAULT_COMMAND = 'find . -type f'
 			
+"------------------------------------------------------------------------------------------------
 
 
 
-"---------------------------------------------------------------------------------------------
-"----used in vim-jsx-pretty ----
+
+
+
+"------------------------Used in vim-jsx-pretty ------------------------------
 let g:vim_jsx_pretty_highlight_close_tag = 1
 let g:vim_jsx_pretty_colorful_config = 1 " default 0
-
-
-
 
 "-----------------------------------------------------------------------------
 
@@ -209,9 +210,9 @@ function! MyTabLine()
         let winnr = tabpagewinnr(tab)
         let bufnr = tabpagebuflist(tab)[winnr - 1]
         let bufname = bufname(bufnr)
-        let bufname = fnamemodify(bufname, ':t') " Get only the filename
+        let bufname = fnamemodify(bufname, ':t') 
         let s .= '%' . tab . 'T'
-        let s .= (tab == tabpagenr() ? '%1*' : '%2*')
+        let s .= (tab == tabpagenr() ? '%#StatusLine#' : '%#TabLine#')
         let s .= ' ' . bufname . ' '
         if tab < tabpagenr('$')
             let s .= '|'
