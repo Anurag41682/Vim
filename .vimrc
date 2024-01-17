@@ -48,7 +48,7 @@ syntax enable
 ":CocInstall coc-html (for html)
 ":CocInstall coc-css (for css)
 
-"------------------- Linter that need to be installed globally (needs config file)------------------
+"------------------- Linter that need to be installed globally (need config file too)------------------
 " 'Eslint' for js,ts,jsx,tsx,json
 " 'clangd' work here for c++
 " 'htmlhint' for html
