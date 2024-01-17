@@ -11,6 +11,7 @@ set nobackup
 set noswapfile
 set noundofile
 set nowritebackup
+set tags=./tags,tags;$HOME
 
 
 "-----------------------------------------------------------------------------------------------
@@ -117,9 +118,14 @@ command! -bang -nargs=* Rg
 "---------enables hidden file to search----------------------
 "let $FZF_DEFAULT_COMMAND = 'find . -type f'
 
+
+"-----------------coc.nvim specific--------------------------------
+"---------------go to definition----------
+nmap <silent> gd :call CocAction('jumpDefinition', 'tabe')<CR>
+
+
+
 "------------------------------------------------------------------------------------------------
-
-
 
 
 
