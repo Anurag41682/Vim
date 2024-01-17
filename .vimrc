@@ -11,7 +11,7 @@ set nobackup
 set noswapfile
 set noundofile
 set nowritebackup
-set tags=./tags,tags;$HOME
+"set tags=./tags,tags;$HOME
 
 
 "-----------------------------------------------------------------------------------------------
