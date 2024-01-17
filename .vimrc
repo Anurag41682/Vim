@@ -213,27 +213,26 @@ inoremap <silent><expr> <Tab>
 
 "--------------------------------------------------------------------------------
 
-"--------------To have only file name in new tab----------------------
+"--------------Tab Configuration----------------------
+
 set tabline=%!MyTabLine()
+
 function! MyTabLine()
-    let s = ''
-    for i in range(tabpagenr('$'))
-        let tab = i + 1
-        let winnr = tabpagewinnr(tab)
-        let bufnr = tabpagebuflist(tab)[winnr - 1]
-        let bufname = bufname(bufnr)
-        let bufname = fnamemodify(bufname, ':t') 
-        let s .= '%' . tab . 'T'
-        let s .= (tab == tabpagenr() ? '%#StatusLine#' : '%#TabLine#')
-        let s .= ' ' . bufname . ' '
-        if tab < tabpagenr('$')
-            let s .= '|'
-        endif
-    endfor
-    return s
+  let s = ''
+  for i in range(tabpagenr('$'))
+    let tab = i + 1
+    let winnr = tabpagewinnr(tab)
+    let bufnr = tabpagebuflist(tab)[winnr - 1]
+    let bufname = bufname(bufnr)
+    let bufname = fnamemodify(bufname, ':t')
+    let filler = (tab == tabpagenr('$') ? '%#TabLineFill#' : '|')
+    let s .= '%' . tab . 'T'
+    let s .= (tab == tabpagenr() ? '%#StatusLine#' : '%#TabLine#')
+    let s .= ' ' . bufname . ' '
+    let s .= filler
+  endfor
+  return s
 endfunction
-
-
 
 
 "--------------------------------------------------------------------------------
