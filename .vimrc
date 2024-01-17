@@ -16,7 +16,7 @@ set nowritebackup
 "-----------------------------------------------------------------------------------------------
 call plug#begin('~/.vim/plugged')
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'} "like intellisense
+Plug 'neoclide/coc.nvim', {'branch': 'release'} "LSP support provider
 Plug 'dense-analysis/ale' "Linter (syntax checker) for all language need to install the linter globally
 Plug 'rhysd/vim-clang-format' "formatter for c++ family
 Plug 'prettier/vim-prettier' "formatter for webdev language
@@ -48,7 +48,7 @@ syntax enable
 ":CocInstall coc-html (for html)
 ":CocInstall coc-css (for css)
 
-"------------------- Linter that need to be installed globally (needs config file)------------------
+"------------------- Linter that need to be installed globally (need config file too)------------------
 " 'Eslint' for js,ts,jsx,tsx,json
 " 'clangd' work here for c++
 " 'htmlhint' for html
