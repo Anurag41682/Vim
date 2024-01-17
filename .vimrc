@@ -95,7 +95,7 @@ nnoremap<C-F5> :!clang++-14 -std=c++20 -Wall -Wextra -Wshadow -fsanitize=undefin
 inoremap {<CR> {<CR>}<C-o>O
 vnoremap<C-C> :w !xclip -i -sel c <CR>
 noremap<C-A> ggVG
-noremap<C-T> :tabnew
+noremap<C-T> :tabnew <CR>
 
 
 "---------------------------------------------------------------------------------------------
