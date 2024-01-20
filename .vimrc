@@ -1,8 +1,6 @@
-"set nocompatible
 filetype on
 set number
 set title
-"set backspace=indent,eol,start
 set noexpandtab tabstop=2 shiftwidth=2
 set softtabstop=2
 set mouse=a
@@ -11,8 +9,6 @@ set nobackup
 set noswapfile
 set noundofile
 set nowritebackup
-"set tags=./tags,tags;$HOME
-
 
 "-----------------------------------------------------------------------------------------------
 call plug#begin('~/.vim/plugged')
@@ -23,12 +19,11 @@ Plug 'rhysd/vim-clang-format' "formatter for c++ family
 Plug 'prettier/vim-prettier' "formatter for webdev language
 Plug 'sheerun/vim-polyglot' "Highlighter(Make text colorful) and indenter for all language
 Plug 'maxmellon/vim-jsx-pretty' "Highlighter for jsx files
-Plug 'junegunn/fzf.vim'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'joshdick/onedark.vim' "theme colorscheme
+Plug 'junegunn/fzf.vim' "file explorer
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } "file explorer
+Plug 'catppuccin/nvim', { 'as': 'catppuccin' } "Theme / colorscheme 
 
 call plug#end()
-syntax enable
 "-------------------------------------------------------------------------------------------------
 
 
@@ -64,26 +59,8 @@ syntax enable
 
 "-----------------------------------Theme colorscheme-----------------------------------------------
 
-"colorscheme solarized
-"colorscheme tokyonight
-"colorscheme monokai
-"colorscheme gruvbox
-colorscheme onedark
-
-"set background=dark
-"set termguicolors
-"colorscheme monokai_pro
-"let g:lightline = {
-"      \ 'colorscheme': 'monokai_pro',
-"      \ }
-
-"let g:molokai_original = 1
-"colorscheme molokai
-
-"colorscheme tender
-"let g:lightline = { 'colorscheme': 'tender' }
-"let g:airline_theme = 'tender'
-
+"colorscheme dogrun
+colorscheme catppuccin-mocha "need to install vim with lua support 
 "----------------------------------------------------------------------------------------------------
 
 
@@ -239,5 +216,3 @@ endfunction
 
 
 "END
-
-
