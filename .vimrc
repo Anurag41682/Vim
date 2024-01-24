@@ -21,7 +21,6 @@ Plug 'sheerun/vim-polyglot' "Highlighter(Make text colorful) and indenter for al
 Plug 'maxmellon/vim-jsx-pretty' "Highlighter for jsx files
 Plug 'junegunn/fzf.vim' "file explorer
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } "file explorer
-Plug 'catppuccin/nvim', { 'as': 'catppuccin' } "Theme / colorscheme 
 
 call plug#end()
 "-------------------------------------------------------------------------------------------------
@@ -58,9 +57,7 @@ call plug#end()
 
 
 "-----------------------------------Theme colorscheme-----------------------------------------------
-
-"colorscheme dogrun
-colorscheme catppuccin-mocha "need to install vim with lua support 
+colorscheme dogrun
 "----------------------------------------------------------------------------------------------------
 
 
@@ -171,7 +168,6 @@ highlight Visual ctermbg=236 guibg=lightgray
 "Parenthesis background and foreground color when cursor hovers
 highlight MatchParen ctermfg=214 ctermbg=none
 
-
 "------------------------------------------------------------------------------
 
 "use <tab> to trigger completion and navigate to the next complete item
@@ -216,3 +212,5 @@ endfunction
 
 
 "END
+
+
