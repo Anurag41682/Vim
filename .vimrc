@@ -159,14 +159,18 @@ let g:ale_linters = {
 
 "for removing background color in vim and using the terminal background
 hi Normal ctermbg=none
+
 "suggestion box
-highlight CocFloating ctermfg=white  ctermbg=black 
+"highlight CocFloating ctermfg=white  ctermbg=black 
+
 "side line warning and error when comes
-highlight SignColumn ctermbg=none guibg=white ctermfg=white guifg=white
+"highlight SignColumn ctermbg=none guibg=white ctermfg=white guifg=white
+
 "change the color of background color of selected text in visual mode
-highlight Visual ctermbg=236 guibg=lightgray
+"highlight Visual ctermbg=236 guibg=lightgray
+
 "Parenthesis background and foreground color when cursor hovers
-highlight MatchParen ctermfg=214 ctermbg=none
+"highlight MatchParen ctermfg=214 ctermbg=none
 
 "------------------------------------------------------------------------------
 
